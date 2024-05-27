@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node -r tsconfig-paths/register ./build/app.js",
+    "start": "node ./build/app.js",
     "dev": "nodemon",
     "build": "tsc"
   },
@@ -13,7 +13,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0",
     "morgan": "^1.10.0",
-    "tsconfig-paths": "^4.2.0",
     "winston": "^3.13.0",
     "zod": "^3.23.8"
   },
