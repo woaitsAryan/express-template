@@ -5,7 +5,7 @@ import logger from './logger'
 let redisClient: Redis
 
 async function connectToRedis (): Promise<void> {
-  if (!redisClient || redisClient.status !== 'ready') {
+  if (typeof redisClient === 'undefined' || !(redisClient instanceof Redis) || redisClient.status !== 'ready') {
     redisClient = new Redis({
       host: envHandler.REDIS_HOST,
       port: envHandler.REDIS_PORT,

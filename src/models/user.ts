@@ -19,9 +19,9 @@ userSchema.set('toJSON', {
     delete ret.passwordHash
     delete ret._id
     delete ret.__v
-    return ret;
+    return ret
   }
-});
+})
 
 const User = mongoose.model<UserType>('User', userSchema)
 

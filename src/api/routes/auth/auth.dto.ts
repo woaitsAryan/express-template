@@ -8,7 +8,7 @@ const registerDto = z.object({
 
 const loginDto = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(8)
 })
 
 type registerDtoType = z.infer<typeof registerDto>

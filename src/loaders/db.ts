@@ -2,7 +2,7 @@ import envHandler from '../config/envHandler'
 import mongoose from 'mongoose'
 import logger from './logger'
 
-async function connectToDB(): Promise<void> {
+async function connectToDB (): Promise<void> {
   const DB_HOST = envHandler.DB_HOST
   const DB_PORT = envHandler.DB_PORT
   const DB_USER = envHandler.DB_USER

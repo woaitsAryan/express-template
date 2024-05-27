@@ -1,14 +1,12 @@
-import { Router } from 'express';
-import { Logincontroller, Registercontroller } from './auth.controller';
+import { Router } from 'express'
+import { Logincontroller, Registercontroller } from './auth.controller'
 
+const authRouter = Router()
 
-const authRouter = Router();
-
-export default (app: Router) => {
-  app.use('/auth', authRouter);
+export default (app: Router): void => {
+  app.use('/auth', authRouter)
 
   authRouter.post('/login', Logincontroller)
 
   authRouter.post('/register', Registercontroller)
-
 }
