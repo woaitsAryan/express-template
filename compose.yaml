@@ -1,0 +1,83 @@
+networks:
+  sample-template-api-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    name: sample-template-mongo-data
+    driver: local
+
+services:
+  sample-template-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sample-template-api
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - sample-template-api-network
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      mongo-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://127.0.0.1:${PORT}/health"]
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  mongo-db:
+    image: mongo:7-jammy
+    container_name: sample-template-mongo
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      - MONGO_INITDB_DATABASE=${DB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+    command: --port ${DB_PORT}
+    networks:
+      - sample-template-api-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:${DB_PORT}/${DB_DATABASE} --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: sample-template-redis-db
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    command: redis-server --requirepass ${REDIS_PASSWORD} --port ${REDIS_PORT}
+    networks:
+      - sample-template-api-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "${REDIS_PORT}", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
