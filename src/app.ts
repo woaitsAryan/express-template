@@ -9,8 +9,7 @@ async function startServer (): Promise<void> {
   loadServer(app)
 
   app.listen(
-    envHandler.PORT,
-    () => {
+    envHandler.PORT, () => {
       logger.info(`Server is running on port ${envHandler.PORT}`)
     }
   )

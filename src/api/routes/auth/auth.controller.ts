@@ -4,28 +4,28 @@ import { loginDto, type loginDtoType, registerDto, type registerDtoType } from '
 import { ErrorBadRequest } from '../../../helpers/errors'
 import AuthService from './auth.service'
 
-export const Registercontroller = catchAsync(
-  async (req: Request, res: Response) => {
-    const validatedBody = registerDto.safeParse(req.body)
-    if (!validatedBody.success) {
-      throw new ErrorBadRequest('Invalid input')
+export default class AuthController {
+  public static Register = catchAsync(
+    async (req: Request, res: Response) => {
+      const validatedBody = registerDto.safeParse(req.body)
+      if (!validatedBody.success) {
+        throw new ErrorBadRequest('Invalid input')
+      }
+
+      const { token, user } = await AuthService.Register(req.body as registerDtoType)
+      return res.json({ token, user })
     }
+  )
 
-    const { token, user } = await AuthService.Register(req.body as registerDtoType)
+  public static Login = catchAsync(
+    async (req: Request, res: Response) => {
+      const validatedBody = loginDto.safeParse(req.body)
+      if (!validatedBody.success) {
+        throw new ErrorBadRequest('Invalid input')
+      }
 
-    return res.json({ token, user })
-  }
-)
-
-export const Logincontroller = catchAsync(
-  async (req: Request, res: Response) => {
-    const validatedBody = loginDto.safeParse(req.body)
-    if (!validatedBody.success) {
-      throw new ErrorBadRequest('Invalid input')
+      const { token, user } = await AuthService.Login(req.body as loginDtoType)
+      return res.json({ token, user })
     }
-
-    const { token, user } = await AuthService.Login(req.body as loginDtoType)
-
-    return res.json({ token, user })
-  }
-)
+  )
+}
