@@ -1,10 +1,12 @@
-import type { Request, Response, NextFunction } from 'express'
+import type { Request, Response, NextFunction } from "express";
 
-const catchAsync = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
+const catchAsync =
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
   (req: Request, res: Response, next: NextFunction) => {
     fn(req, res, next).catch((err: Error) => {
-      next(err)
-    })
-  }
+      next(err);
+    });
+  };
 
-export default catchAsync
+export default catchAsync;

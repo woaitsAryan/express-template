@@ -1,18 +1,16 @@
-import express from 'express'
-import loadServer from './loaders'
-import envHandler from './config/envHandler'
-import logger from './loaders/logger'
+import express from "express";
+import loadServer from "@/loaders";
+import envHandler from "@/config/envHandler";
+import logger from "@/loaders/logger";
 
-async function startServer (): Promise<void> {
-  const app = express()
+async function startServer(): Promise<void> {
+  const app = express();
 
-  loadServer(app)
+  loadServer(app);
 
-  app.listen(
-    envHandler.PORT, () => {
-      logger.info(`Server is running on port ${envHandler.PORT}`)
-    }
-  )
+  app.listen(envHandler.PORT, () => {
+    logger.info(`Server is running on port ${envHandler.PORT}`);
+  });
 }
 
-void startServer()
+void startServer();

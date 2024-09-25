@@ -1,11 +1,11 @@
-import { Router } from 'express'
-import AuthController from './auth.controller'
+import { Router } from "express";
+import { AuthController } from "./auth.controller";
 
-const authRouter = Router()
+const authRouter = Router();
 
 export default (app: Router): void => {
-  app.use('/auth', authRouter)
+  app.use("/auth", authRouter);
 
-  authRouter.post('/login', AuthController.Login)
-  authRouter.post('/register', AuthController.Register)
-}
+  authRouter.post("/login", AuthController.Login);
+  authRouter.post("/register", AuthController.Register);
+};

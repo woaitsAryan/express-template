@@ -15,7 +15,6 @@ sed -i "s/REDIS_PASSWORD=.*$/REDIS_PASSWORD=$REDIS_PASSWORD/" .env
 sed -i "s/DB_DATABASE=.*/DB_DATABASE=$CONTAINER_NAME/" .env
 sed -i "s/sample-template/$CONTAINER_NAME/g" compose.yaml
 
-
 docker run --name ${CONTAINER_NAME}-mongo -d -p 27017:27017 \
       -e MONGO_INITDB_ROOT_USERNAME=admin \
       -e MONGO_INITDB_ROOT_PASSWORD=$DB_PASSWORD \

@@ -1,33 +1,15 @@
-FROM node:20-alpine as base
-
-FROM base AS deps
+FROM oven/bun:latest
 
 WORKDIR /app
-COPY package.json pnpm-lock.yaml* ./
 
-RUN corepack enable pnpm && pnpm i --frozen-lockfile --prod && pnpm install -D typescript
+COPY package.json ./
 
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY bun.lockb ./
 
-RUN corepack enable pnpm && pnpm run build
+RUN bun install --production
 
-FROM base AS runner
-WORKDIR /app
+COPY src ./
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 server_user
+RUN bun run build
 
-RUN mkdir build
-RUN chown server_user:nodejs build
-
-COPY --from=builder --chown=server_user:nodejs /app/build ./
-COPY --from=builder --chown=server_user:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=server_user:nodejs /app/package.json ./package.json
-
-USER server_user
-
-ENTRYPOINT ["node"]
-CMD ["app.js"]
+CMD [ "bun", "run", "start:prod" ]
